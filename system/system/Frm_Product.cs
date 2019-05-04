@@ -10,12 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using system.Connection;
 
 namespace system
 {
     public partial class Frm_Product : Form
     {
-        SqlConnection cn;
+        SqlConnection cn = Database.Instance;
 
         public Frm_Product()
         {
@@ -94,14 +95,18 @@ namespace system
             try
             {
                 if (cn == null)
-                    cn = dataContextFactory.DataContext().;
+                {
+                    MessageBox.Show("Não foi possível abrir a conexão.", "Error ao conectar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                if ()
+                if (cn.State == ConnectionState.Closed)
+                    cn.Open();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                MessageBox.Show($@"Não foi possível abrir a conexão.
+                                Error: {ex.Message}", "Error ao conectar", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             string image = tb_image.Text;
             Bitmap bmp = new Bitmap(image);
@@ -109,8 +114,9 @@ namespace system
             byte[] bimage = new byte[fs.Length];
             fs.Read(bimage, 0, Convert.ToInt32(fs.Length));
             fs.Close();
-            SqlCommand cmd = new SqlCommand("insert into tb_produto(imagem) values(@imgdata)", cn);
+            SqlCommand cmd = new SqlCommand("update tb_produto SET imagem = @imgdata where id_produto = @id_produto", cn);
             cmd.Parameters.AddWithValue("@imgdata", SqlDbType.Image).Value = bimage;
+            cmd.Parameters.AddWithValue("@id_produto", SqlDbType.Int).Value = Convert.ToInt32(lblID.Text);
             cmd.ExecuteNonQuery();
             cn.Close();
 
@@ -141,6 +147,22 @@ namespace system
         {
           //  if (e.Value != null && e.ColumnIndex == 5)//coluna 5 contem a descrição do tipo de categoria do produto
             //    e.Value = Convert.ToInt32(((categoria)e.Value).tipo_categoria);
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.SelectedCells.Count > 0) // Checking to see if any cell is selected
+            {
+                var id = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+
+                lblID.Text = id.PadLeft(4, '0');
+                //int mSelectedRowIndex = dataGridView1.SelectedCells[0].RowIndex;
+
+                //DataGridViewRow mSelectedRow = dataGridView1.Rows[mSelectedRowIndex];
+
+                //string mCatagoryName = Convert.ToString(mSelectedRow.Cells[1].Value);
+
+            }
         }
     }
 }
