@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ecommerce" Class="systemDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=LAPTOP-E6DMLRUT\MSSQLSEVER;Initial Catalog=ecommerce;Integrated Security=True" SettingsObjectName="system.dal.Properties.Settings" SettingsPropertyName="ecommerceConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.tb_admin_user" Member="admin_users">
+    <Type Name="admin_user">
+      <Column Name="id_admin" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="nome" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="apelido" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="palavra_passe" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="nif" Type="System.String" DbType="VarChar(9) NOT NULL" CanBeNull="false" />
+      <Column Name="telemovel" Type="System.String" DbType="VarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="estado" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tb_categoria" Member="categorias">
+    <Type Name="categoria">
+      <Column Name="id_categoria" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="tipo_categoria" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="categoria_produto" Member="produtos" ThisKey="id_categoria" OtherKey="id_categoria" Type="produto" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tb_cliente" Member="clientes">
+    <Type Name="cliente">
+      <Column Name="id_cliente" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="nome_cliente" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="apelido_cliente" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="nif_cliente" Type="System.String" DbType="VarChar(9) NOT NULL" CanBeNull="false" />
+      <Column Name="morada_cliente" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="email_cliente" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="id_user" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="user_cliente" Member="user" ThisKey="id_user" OtherKey="id_user" Type="user" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tb_item_vendas" Member="item_vendas">
+    <Type Name="item_venda">
+      <Column Name="id_item" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="valor" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="id_venda" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="id_produto" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="quantidade" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="produto_item_venda" Member="produto" ThisKey="id_produto" OtherKey="id_produto" Type="produto" IsForeignKey="true" />
+      <Association Name="venda_item_venda" Member="venda" ThisKey="id_venda" OtherKey="id_venda" Type="venda" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tb_produto" Member="produtos">
+    <Type Name="produto">
+      <Column Name="id_produto" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="nome" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="preco" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="descricao" Type="System.String" DbType="VarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="REF" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="id_categoria" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="tipo_categoria" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="imagem" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="stock" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="produto_item_venda" Member="item_vendas" ThisKey="id_produto" OtherKey="id_produto" Type="item_venda" />
+      <Association Name="categoria_produto" Member="categoria" ThisKey="id_categoria" OtherKey="id_categoria" Type="categoria" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tb_user" Member="users">
+    <Type Name="user">
+      <Column Name="id_user" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="nome" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="apelido" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="nif" Type="System.String" DbType="VarChar(9) NOT NULL" CanBeNull="false" />
+      <Column Name="palavra_passe" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="morada" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="telemovel" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="estado" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="user_cliente" Member="clientes" ThisKey="id_user" OtherKey="id_user" Type="cliente" />
+      <Association Name="user_venda" Member="vendas" ThisKey="id_user" OtherKey="id_user" Type="venda" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tb_venda" Member="vendas">
+    <Type Name="venda">
+      <Column Name="id_venda" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="valor" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="desconto" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="valor_pago" Type="System.Decimal" DbType="Decimal(15,2) NOT NULL" CanBeNull="false" />
+      <Column Name="id_user" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="venda_item_venda" Member="item_vendas" ThisKey="id_venda" OtherKey="id_venda" Type="item_venda" />
+      <Association Name="user_venda" Member="user" ThisKey="id_user" OtherKey="id_user" Type="user" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tb_supplier" Member="suppliers">
+    <Type Name="supplier">
+      <Column Name="Id_Suplier" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CompanyName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Country" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="City" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Nif" Type="System.String" DbType="VarChar(9)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
